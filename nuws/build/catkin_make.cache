@@ -1,0 +1,2 @@
+
+-DCATKIN_DEVEL_PREFIX=/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/devel -DCMAKE_INSTALL_PREFIX=/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/install -G Unix Makefiles

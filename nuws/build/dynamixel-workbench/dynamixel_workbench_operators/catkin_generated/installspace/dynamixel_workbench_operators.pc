@@ -1,0 +1,8 @@
+prefix=/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/install
+
+Name: dynamixel_workbench_operators
+Description: Description of dynamixel_workbench_operators
+Version: 2.2.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: roscpp std_srvs sensor_msgs trajectory_msgs geometry_msgs cmake_modules

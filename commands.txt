@@ -1,0 +1,21 @@
+
+ssh ubuntu@turtlebot.local      # SSH into the turtlebot
+ctrl + D                        # to exit from the turtlebot
+
+roslaunch turtlebot3_bringup turtlebot3_robot.launch    # This launchfile starts everything that is needed to control the turtlebot
+
+# After launcing, we can open a new terminal and publish msgs to the turtlebot
+rostopic pub /sound turtlebot3_msgs/Sound "value: 2"    # sending sound msgs (http://docs.ros.org/noetic/api/turtlebot3_msgs/html/msg/Sound.html)
+rostopic pu-r 10 /cmd_vel geometry_msgs/Twist "linear:  # moving the turtle
+  x: 1.0
+  y: 0.0
+  z: 0.0
+angular:
+  x: 0.0
+  y: 0.0
+  z: 1.0" 
+
+
+
+
+
