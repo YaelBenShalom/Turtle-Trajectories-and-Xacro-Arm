@@ -1,0 +1,5 @@
+<launch>
+   <node name="trajectory" pkg="homework2" type="trajectory" />
+   <node name="rviz" pkg="rviz" type="rviz" arg="-d $(find trajectory)/config/eight_view.rviz" >
+   </node>
+</launch>
