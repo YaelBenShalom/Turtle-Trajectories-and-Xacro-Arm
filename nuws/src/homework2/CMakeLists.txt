@@ -7,8 +7,9 @@ project(homework2)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
-
+find_package(catkin REQUIRED COMPONENTS
+geometry_msgs
+turtlesim)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -16,7 +17,7 @@ find_package(catkin REQUIRED)
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
+catkin_python_setup()
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -99,6 +100,9 @@ find_package(catkin REQUIRED)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
+CATKIN_DEPENDS
+geometry_msgs
+turtlesim
 #  INCLUDE_DIRS include
 #  LIBRARIES homework2
 #  CATKIN_DEPENDS other_catkin_pkg
@@ -157,6 +161,8 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
   nodes/trajectory
+#  nodes/calculations1.py
+  src/${PROJECT_NAME}/calculations.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

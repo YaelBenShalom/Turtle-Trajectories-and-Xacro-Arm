@@ -1,100 +1,126 @@
 #!/usr/bin/env python3
 
 """
- The trajectory node publishes a custom velocity message into a
- geometry_msgs/Twist and draws a continuous line in rviz
+ The trajectory node publishes a custom velocity message into a geometry_msgs/Twist
+ and publish to the turtlebot cmd_vel in order to draw the figure eight
 
  PUBLISHERS:
-  cmd_vel (geometry_msgs/Twist) ~ the velocity of the turtlebot
+  cmd_vel (geometry_msgs/Twist) - the linear and angular velocity of the turtlebot
 
 SERVICES:   
-  pause (<type>) ~ stop the turtle's motion, in a way that the trajectory can be resumed
-  resume (<type>) ~ resume the turtle's motion along the trajectory
+  pause (Empty) - stop the turtle's motion, in a way that the trajectory can be
+                    resumed
+  resume (Empty) - resume the turtle's motion along the trajectory
 
 PARAMETERS:
-  width ~ The width of the figure eight
-  height ~ The height of the figure eight
-  period ~ The amount of time it takes to complete the figure eight
-  ~pub_freq ~ The frequency at which to publish the messages (a private parameter)
+  width - The width of the figure eight
+  height - The height of the figure eight
+  period - The amount of time it takes to complete the figure eight
+  ~pub_freq - The frequency at which to publish the messages (a private parameter)
 """
 
 import rospy
-from geometry_msgs.msg import Twist, Pose, Point, PoseStamped, Quaternion
+from geometry_msgs.msg import Twist, Pose, Point, PoseStamped, Quaternion, Vector3
 from nav_msgs.msg import Path
-# from homework2.srv import PauseTurtle, ResumeTurtle # TODO
-# from calculations import calculate_velocity # TODO
+from std_srvs.srv import Empty, EmptyResponse
 import sympy
 from sympy.abc import t
-from sympy import symbols, Eq, Function, cos, sin, atan, pi
+from sympy import symbols, Eq, Function, cos, sin, atan2, pi
+# import calculations1 as calculations #TODO 
 
-class calculate:
-    """ Calculate the turtlebot eight-trajectory in time
+##################### TODO Move
+
+import sympy
+from sympy import symbols, Eq, Function, solve, sqrt
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+
+def calculate_velocity(T_val, H_val, W_val):
+    W, H, T, t = symbols(r'W, H, T, t') 
+
+    v = Function(r'v')(t)
+    x = Function(r'x')(t)
+    y = Function(r'y')(t)
+    theta = Function(r'theta')(t)
+
+    x = (W/2)*sympy.sin(2*sympy.pi*t/T) # a function for the component x(t) of the figure-eight trajectory
+    y = (H/2)*sympy.sin(4*sympy.pi*t/T) # a function for the component y(t) of the figure-eight trajectory
+
+    # taking a derivative
+    xdot = x.diff(t)
+    ydot = y.diff(t)
+
+    xddot = xdot.diff(t)
+    yddot = ydot.diff(t)
+
+
+    # from the kinematic equations  xdot = v*cos(theta)
+    #                               ydot = v*sin(theta) we get:
+    v = sqrt(xdot**2 + ydot**2)
+    theta = sympy.atan2(ydot, xdot)
+
+    thetadot = theta.diff(t)        # derivative d/dt of theta(t) 
+    omega = thetadot                # defining omega
+
+    v = sympy.simplify(v.subs([(W, W_val), (H, H_val), (T, T_val)]))
+    omega = sympy.simplify(omega.subs([(W, W_val), (H, H_val), (T, T_val)]))
+    x = sympy.simplify(x.subs([(W, W_val), (H, H_val), (T, T_val)]))
+    y = sympy.simplify(y.subs([(W, W_val), (H, H_val), (T, T_val)]))
+
+    return x, y, v, omega
+
+class FigureEight():
+    def __init__(self, T_val, H_val, W_val):
+        self._x, self._y, self._v, self._omega = calculate_velocity(T_val, H_val, W_val)
+        self._t = symbols(r't')
+
+    def get_velocity(self, time_step):
+        x = self._x.subs(self._t, time_step)
+        y = self._y.subs(self._t, time_step)
+        v = self._v.subs(self._t, time_step)
+        omega = self._omega.subs(self._t, time_step)
+        return float(x), float(y), float(v), float(omega)
+
+
+#####################
+
+
+
+class Trajectory():
+    """ Publishe the a geometry_msgs/Twist of the calculated linear and angular
+    velocity to the tertlebot's cmd_vel at a fixed rate 
+    """
+    def __init__(self):
+        self.W = rospy.get_param("trajectory/width")    # initializing the width of the figure eight
+        self.H = rospy.get_param("trajectory/height")   # initializing the height of the figure eight
+        self.T = rospy.get_param("trajectory/period")   # initializing the amount of time it takes to complete the figure eight
+        self.R = rospy.get_param("~pub_freq")           # initializing the frequency at which to publish the messages
+        self.pub_vel = rospy.Publisher("turtle1/cmd_vel", Twist, queue_size = 10) # TODO remove turtle1
+        self.path_pub = rospy.Publisher("path", Path, queue_size = 10)       # TODO - ~path  
+        self.pause = rospy.Service("pause", Empty, self.pause_turtle_callback)
+        self.resume = rospy.Service("resume", Empty, self.resume_turtle_callback)
+        self.figure_eight = FigureEight(self.T, self.H, self.W) # TODO add calculations.
+        self.rate = rospy.Rate(self.R)
+        self.move_turtlebot = True # TODO False
+        self._t = 0
+        self.path = Path()
+        self.path.poses = []
+        self.x = None
+        self.y = None
+
+    def turtlebot_twist(self):
+        """ Create a twist suitable for the turtlebot's cmd_vel
+
+        Returns:
+            Twist - a 2D twist object corresponding to linear/angular velocity
         """
-    def __init__(self):
-        pass # TODO
+        self.x, self.y, v, omega = self.figure_eight.get_velocity(self._t)
+        return Twist(linear = Vector3(x = v, y = 0, z = 0),
+                    angular = Vector3(x = 0, y = 0, z = 10*omega)) # TODO 10*omega
 
 
-    def calculate_velocity(self, x, y):
-        W, H, T = symbols(r'W, H, T')
-
-        x = Function(r'x')(t)
-        y = Function(r'y')(t)
-        theta = Function(r'theta')(t)
-
-        x = (W/2)*sin(2*pi*t/T) # a function for the component x(t) of the figure-eight trajectory
-        y = (H/2)*sin(4*pi*t/T) # a function for the component y(t) of the figure-eight trajectory
-
-        # taking a derivative
-        xdot = x.diff(t)
-        ydot = y.diff(t)
-
-        xddot = xdot.diff(t)
-        yddot = ydot.diff(t)
-
-        # from the kinematic equations  xdot = v*cos(theta)
-        #                               ydot = v*sin(theta) we get:
-        v = sympy.simplify(xdot**2 + ydot**2)
-        theta = atan(ydot/xdot)
-
-        thetadot = sympy.simplify(theta.diff(t))    # derivative d/dt of theta(t) 
-        omega = thetadot    # defining omega
-
-        return v, omega
-
-
-def turtlebot_twist(x, y):
-    """ Create a twist suitable for the turtlebot
-
-    Args:
-        x (float) : the x position
-        y (float) : the y position
-
-    Returns:
-        Twist - a 2D twist object corresponding to linear/angular velocity
-    """
-    v, omega = calculate_velocity(x, y) # TODO
-
-    return Twist(linear = Vector3(x = v, y = 0, z = 0),
-                angular = Vector3(x = 0, y = 0, z = omega))
-
-
-class Trajectory:
-    """ Publishes movement geometry_msgs/Twist commands at a fixed rate 
-    """
-    def __init__(self):
-        # self.sub = rospy.Subscriber("/turtle1/turtle_vel", TurtleVel, self.turtle_vel_callback)
-        self.pub_vel = rospy.Publisher('/cmd_vel', Twist, queue_size = 10)
-        self.pub_path = rospy.Publisher('~path', Path, queue_size = 10)       # TODO - ~path  
-        self.pause = rospy.Service("/pause_turtle", PauseTurtle, self.pause_turtle_callback)  # TODO - service
-        self.resume = rospy.Service("/resume_turtle", ResumeTurtle, self.resume_turtle_callback)  # TODO - service
-        self._angular = 0
-        self._linear = 0
-        self.rate = rospy.Rate(20) # 20hz
-        self.move_turtlebot = False
-        self.pose_x = None
-        self.pose_y = None
-
-    def pause_turtle_callback (self):
+    def pause_turtle_callback(self):
         """ Callback function for turtle_vel topic
         Subscribes to a topic turtle_vel, listening for TurtleVel messages. 
         The subscriber log the input as a debug level message and publishes
@@ -104,12 +130,13 @@ class Trajectory:
         data from the subscricber
         """
         rospy.logdebug(f"Pause Message")
-        twist = turtlebot_twist(0, 0)
+        twist = self.turtlebot_twist()
         self.pub_vel.publish(twist)
         self.move_turtlebot = False
+        return EmptyResponse
 
 
-    def resume_turtle_callback (self):
+    def resume_turtle_callback(self):
         """ Callback function for turtle_vel topic
         Subscribes to a topic turtle_vel, listening for TurtleVel messages. 
         The subscriber log the input as a debug level message and publishes
@@ -118,29 +145,43 @@ class Trajectory:
         Args:
         data from the subscricber
         """
+        rospy.logdebug(f"Resume Message")
         self.move_turtlebot = True
+        return EmptyResponse
 
 
     def move(self):
-        rospy.logdebug(f"Message: {self._linear, self._angular}")
-        twist = turtlebot_twist(self.pose_x, self.pose_y)
-        # TODO Calucate next
-        # TODO Store data
+        rospy.logdebug(f"Posting: {self._t, self.figure_eight.get_velocity(self._t)}")
+        twist = self.turtlebot_twist()
+        self.path.header.stamp = rospy.Time.now()
+        self.path.header.frame_id = "map"
+        self.path.poses.append(PoseStamped(header = self.path.header, 
+                                        pose = Pose(
+                                            position = Point(self.x, self.y, 1), 
+                                            orientation = Quaternion(0, 0, 0, 1))))
+        self.path_pub.publish(self.path)
+        self._t += 1
         self.pub_vel.publish(twist)
+        if self._t == 100: # TODO - T
+            self.path.poses = []
 
 
     def run(self):
         while True:
+            rospy.logdebug(f"Run Message")
             if self.move_turtlebot:
-                self.move() #TODO 
-        self.rate.sleep()
-
+                self.move()
+            else:
+             rospy.logdebug(f"In pause mode")
+            self.rate.sleep()
 
 
 def main():
     """ The main() function. """
-    rospy.init_node('trajectory')
+    rospy.init_node('trajectory', log_level=rospy.DEBUG)
+    rospy.logdebug(f"Running 1") #TODO 
     traj = Trajectory()
+    rospy.logdebug(f"Running 2") #TODO 
     traj.run()
     rospy.spin()
 
