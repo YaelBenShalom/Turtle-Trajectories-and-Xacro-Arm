@@ -1,10 +1,11 @@
 <launch>
-   <node name="roaming_turtle" pkg="turtlesim" type="turtlesim_node" />
+   <!-- <node name="roaming_turtle" pkg="turtlesim" type="turtlesim_node" /> -->
    <node name="trajectory" pkg="homework2" type="trajectory" >
-           <param name="width" value="90" />
-           <param name="height" value="50" />
-           <param name="period" value="180" />
+           <param name="width" value="9" />
+           <param name="height" value="5" />
+           <param name="period" value="18" />
            <param name="~pub_freq" value="10" />
-   <!-- <node name="rviz" pkg="rviz" type="rviz" arg="-d $(find trajectory)/config/eight_view.rviz" > -->
    </node>
+   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find homework2)/config/turtle_view.rviz" />
+
 </launch>
