@@ -27,8 +27,15 @@ from std_srvs.srv import Empty, EmptyResponse
 import sympy
 from sympy.abc import t
 from sympy import symbols, Eq, Function, cos, sin, atan2, pi
-# import calculations1 as calculations # TODO 
 import tf
+# import calculations1 as calculations # TODO 
+# import yaml
+
+# with open(r'config/trajectory.yaml') as file:
+#     # The FullLoader parameter handles the conversion from YAML
+#     # scalar values to Python the dictionary format
+#     parameters_list = yaml.load(file, Loader=yaml.FullLoader)
+
 ##################### TODO Move
 
 import sympy
@@ -173,8 +180,10 @@ class Trajectory():
         self.path_pub.publish(self.path)
         self._t += 1/self.R
         self.pub_vel.publish(twist)
-        if self._t == self.T:
+        rospy.logdebug(f"t = {self._t}")
+        if int(self._t) == self.T:
             self.path.poses = []
+            self._t = 0
 
 
     def run(self):
