@@ -1,12 +1,18 @@
 <launch>
+   <arg name="rqt_plot" default="False"/>
+   <arg name="Gazebo" default="False"/>
+   <arg name="rviz" default="False"/>
+
    <rosparam command="load" file="$(find homework2)/config/trajectory.yaml" />
    <!-- <node name="roaming_turtle" pkg="turtlesim" type="turtlesim_node" /> -->
    <node name="trajectory" pkg="homework2" type="trajectory" >
-           <!-- <param name="width" value="9" />
-           <param name="height" value="5" />
-           <param name="period" value="18" />
-           <param name="~pub_freq" value="10" /> -->
+           <param name="~pub_freq" value="10" />
    </node>
-   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find homework2)/config/turtle_view.rviz" />
-
+   <!-- <group if="$(arg rqt_plot)">
+        <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot" args="/joint_states/position[0] /joint_states/position[1]" /> -->
+   <!-- <group if="$(arg Gazebo)">
+        <node name="Gazebo" pkg="Gazebo" type="Gazebo" args="-d $(find homework2)/config/turtle_view.rviz" /> -->
+   <group if="$(arg rviz)">
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find homework2)/config/turtle_view.rviz" />
+   </group>
 </launch>
