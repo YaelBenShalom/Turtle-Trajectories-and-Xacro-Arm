@@ -4,14 +4,16 @@
    <arg name="rviz" default="False"/>
 
    <rosparam command="load" file="$(find homework2)/config/trajectory.yaml" />
-   <!-- <node name="roaming_turtle" pkg="turtlesim" type="turtlesim_node" /> -->
    <node name="trajectory" pkg="homework2" type="trajectory" >
            <param name="~pub_freq" value="10" />
    </node>
-   <!-- <group if="$(arg rqt_plot)">
+   <group if="$(arg rqt_plot)">
+        <node name="roaming_turtle" pkg="turtlesim" type="turtlesim_node" />
         <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot" args="/joint_states/position[0] /joint_states/position[1]" /> -->
+   </group>
    <!-- <group if="$(arg Gazebo)">
-        <node name="Gazebo" pkg="Gazebo" type="Gazebo" args="-d $(find homework2)/config/turtle_view.rviz" /> -->
+        <node name="Gazebo" pkg="Gazebo" type="Gazebo" args="-d $(find homework2)/congif/empty.world" />
+   </group> -->
    <group if="$(arg rviz)">
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(find homework2)/config/turtle_view.rviz" />
    </group>

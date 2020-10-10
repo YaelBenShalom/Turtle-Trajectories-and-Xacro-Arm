@@ -14,6 +14,7 @@ sudo poweroff # poweroff the turtlebot (after ssh into the turtlebot)
 # After SSH into the turtlebot
 roslaunch turtlebot3_bringup turtlebot3_robot.launch    # This launchfile starts everything that is needed to control the turtlebot
 
+rosservice call /resume
 
 # After launcing, we can open a new terminal and publish msgs to the turtlebot
 rostopic pub /sound turtlebot3_msgs/Sound "value: 2"    # sending sound msgs (http://docs.ros.org/noetic/api/turtlebot3_msgs/html/msg/Sound.html)
