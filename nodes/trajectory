@@ -49,6 +49,8 @@ class Trajectory():
         self.rate = rospy.Rate(self.R)
         self.move_turtlebot = True # TODO False
         self._t = 0
+        self.init_t = rospy.get_time()
+        self.round = 1
         self.path = Path()
         self.path.poses = []
         self.x = None
@@ -115,12 +117,16 @@ class Trajectory():
                                             position = Point(self.x, self.y, 0), 
                                             orientation = Quaternion(0, 0, 0, 1))))
         self.path_pub.publish(self.path)
-        self._t = rospy.get_time()
+        # self._t += 1/self.R
+        self._t = rospy.get_time() - self.init_t
         self.pub_turtle1_vel.publish(twist)
-        self.pub_vel.publish(twist)        
+        self.pub_vel.publish(twist)
         rospy.logdebug(f"t = {self._t}")
-        if self._t == self.T:
+        # if int(self._t) == self.T:       
+        if int(self._t/self.round) == self.T:
             self.path.poses = []
+            # self._t = 0
+            self.round += 1
 
 
     def run(self):
