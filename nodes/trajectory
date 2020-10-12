@@ -47,8 +47,8 @@ class Trajectory():
         self.resume = rospy.Service("resume", Empty, self.resume_turtle_callback)
         self.figure_eight = FigureEight(self.T, self.H, self.W) # TODO add calculations.
         self.rate = rospy.Rate(self.R)
-        self.move_turtlebot = True # TODO False
         self._t = 0
+        self.move_turtlebot = True # TODO False
         self.init_t = rospy.get_time()
         self.round = 1
         self.path = Path()
@@ -103,7 +103,7 @@ class Trajectory():
         """
         self.x, self.y, v, omega = self.figure_eight.get_velocity(self._t)
         return Twist(linear = Vector3(x = v, y = 0, z = 0),
-                    angular = Vector3(x = 0, y = 0, z = omega)) # TODO 10*omega
+                    angular = Vector3(x = 0, y = 0, z = omega))
 
 
     def move(self):
