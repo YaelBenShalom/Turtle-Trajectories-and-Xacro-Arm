@@ -25,10 +25,12 @@ from geometry_msgs.msg import Twist, Pose, Point, PoseStamped, Quaternion, Vecto
 from nav_msgs.msg import Path
 from std_srvs.srv import Empty, EmptyResponse
 import sympy
+import sys
 from sympy.abc import t
 from sympy import symbols, Eq, Function, cos, sin, atan2, pi
 import tf
-from homework2.calculations import FigureEight # TODO 
+import tf2_ros
+from homework2.calculations import FigureEight
 
 
 class Trajectory():
@@ -41,13 +43,15 @@ class Trajectory():
         self.T = rospy.get_param("parameters/period")   # initializing the amount of time it takes to complete the figure eight
         self.R = rospy.get_param("~pub_freq")           # initializing the frequency at which to publish the messages
         self.pub_turtle1_vel = rospy.Publisher("turtle1/cmd_vel", Twist, queue_size = 10) # TODO replace turtle1 with turtlebot
-        self.pub_vel = rospy.Publisher("/cmd_vel", Twist, queue_size = 10) # TODO ^^^
+        self.pub_vel = rospy.Publisher("/cmd_vel", Twist, queue_size = 10)
         self.path_pub = rospy.Publisher("path", Path, queue_size = 10)
         self.pause = rospy.Service("pause", Empty, self.pause_turtle_callback)
         self.resume = rospy.Service("resume", Empty, self.resume_turtle_callback)
-        self.figure_eight = FigureEight(self.T, self.H, self.W) # TODO add calculations.
+        self.figure_eight = FigureEight(self.T, self.H, self.W)
         self.rate = rospy.Rate(self.R)
         self._t = 0
+        self.t_paused = rospy.get_time()
+        self.delta_t_paused = 0
         self.move_turtlebot = True # TODO False
         self.init_t = rospy.get_time()
         self.round = 1
@@ -70,6 +74,7 @@ class Trajectory():
         self.pub_turtle1_vel.publish(twist)
         self.pub_vel.publish(twist)
         self.move_turtlebot = False
+        self.t_paused = rospy.get_time()
         return EmptyResponse()
 
 
@@ -82,6 +87,7 @@ class Trajectory():
         """
         rospy.logdebug(f"Resume Message")
         self.move_turtlebot = True
+        self.delta_t_paused += rospy.get_time() - self.t_paused
         return EmptyResponse()
 
 
@@ -91,7 +97,7 @@ class Trajectory():
         trajectory
         """
         pos = (0, 0, 0)
-        rot = tf.transformations.quaternion_from_euler(0, 0, sympy.pi/4) 
+        rot = tf.transformations.quaternion_from_euler(0, 0, sympy.pi/2) 
         self.br.sendTransform(pos, rot, rospy.Time.now(), "odom", "world") 
 
 
@@ -118,7 +124,7 @@ class Trajectory():
                                             orientation = Quaternion(0, 0, 0, 1))))
         self.path_pub.publish(self.path)
         # self._t += 1/self.R
-        self._t = rospy.get_time() - self.init_t
+        self._t = rospy.get_time() - self.init_t - self.delta_t_paused
         self.pub_turtle1_vel.publish(twist)
         self.pub_vel.publish(twist)
         rospy.logdebug(f"t = {self._t}")
@@ -130,7 +136,7 @@ class Trajectory():
 
 
     def run(self):
-        while True:
+        while not rospy.is_shutdown():
             rospy.logdebug(f"Run Message")
             if self.move_turtlebot:
                 self.move()
