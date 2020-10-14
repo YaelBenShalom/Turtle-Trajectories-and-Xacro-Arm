@@ -31,7 +31,8 @@ def calculate_velocity(T_val, H_val, W_val):
 
     thetadot = theta.diff(t)        # derivative d/dt of theta(t) 
     omega = thetadot                # defining omega
-
+    
+    # theta = sympy.simplify(theta.subs([(W, W_val), (H, H_val), (T, T_val)]))
     v = sympy.simplify(v.subs([(W, W_val), (H, H_val), (T, T_val)]))
     omega = sympy.simplify(omega.subs([(W, W_val), (H, H_val), (T, T_val)]))
     x = sympy.simplify(x.subs([(W, W_val), (H, H_val), (T, T_val)]))

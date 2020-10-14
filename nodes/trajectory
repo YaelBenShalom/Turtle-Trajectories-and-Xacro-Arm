@@ -72,13 +72,11 @@ class Trajectory():
         static_transformStamped.transform.translation.x = 0
         static_transformStamped.transform.translation.y = 0
         static_transformStamped.transform.translation.z = 0
-        quat = tf.transformations.quaternion_from_euler(0, 0, sympy.pi/2)
+        quat = tf.transformations.quaternion_from_euler(0, 0, 1.08) # 0.896055384571344 - the angle of the turtle at (0,0,0) - from calculation
         static_transformStamped.transform.rotation.x = quat[0]
         static_transformStamped.transform.rotation.y = quat[1]
         static_transformStamped.transform.rotation.z = quat[2]
         static_transformStamped.transform.rotation.w = quat[3]
-        # quat = tf.transformations.quaternion_about_axis(-1.10714, [0,0,1])
-        # static_transformStamped.transform.rotation = geometry_msgs.msg.Quaternion(*quat)
         self.br.sendTransform(static_transformStamped)
 
     def pause_turtle_callback(self, message):
@@ -134,7 +132,7 @@ class Trajectory():
     def move(self):
         # self.transform_broadcast()
         self.path.header.stamp = rospy.Time.now()
-        self.path.header.frame_id = "odom"
+        self.path.header.frame_id = "world"
         self.path.poses.append(PoseStamped(header = self.path.header, 
                                         pose = Pose(
                                             position = Point(self.x, self.y, 0), 

@@ -59,21 +59,24 @@
       </visual>
 </link>
 
-<!-- <joint name="rotational" type="continuous">
+<joint name="joint3" type="continuous">
     <axis xyz="0 0 1" />
-    <origin xyz="${L2+L2} 0 0" rpy="0 0 0" />
+    <limit effort="1000.0"  velocity="0.5" />
+    <origin rpy="0 0 0" xyz="${L2} 0 0" />
     <parent link="link2" />
-    <child link="?" />
-</joint> -->
+    <child link="link3" />
+</joint>
+
+<link name="link3">
+    <visual>
+        <origin rpy="0 ${pi/2} 0" xyz="${1/2} 0 0" />
+        <geometry>
+        <cylinder radius="0.1" length="0.1" />
+        </geometry>
+        <material name="transparent">
+            <color rgba="1 1 1 0" />
+        </material>
+      </visual>
+</link>
 
 </robot>
-
-<!-- 
-
-
-<joint name="rotational" type="continuous">
-  <origin xyz="1.5 0 0.5" rpy="0 0 0" />
-  <parent link="body" />
-  <child link="arm" />
-</joint>
-</robot> -->
