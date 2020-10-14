@@ -21,11 +21,11 @@ PARAMETERS:
 """
 
 import rospy
+import geometry_msgs.msg
 from geometry_msgs.msg import Twist, Pose, Point, PoseStamped, Quaternion, Vector3
 from nav_msgs.msg import Path
 from std_srvs.srv import Empty, EmptyResponse
 import sympy
-import sys
 from sympy.abc import t
 from sympy import symbols, Eq, Function, cos, sin, atan2, pi
 import tf
@@ -59,8 +59,27 @@ class Trajectory():
         self.path.poses = []
         self.x = None
         self.y = None
-        self.br = tf.TransformBroadcaster()
 
+        # Transform from world frame (0, 0, 0) to odom frame (0, 0, theta0)
+        # self.br = tf.TransformBroadcaster()
+        self.br = tf2_ros.StaticTransformBroadcaster() # TODO
+
+        static_transformStamped = geometry_msgs.msg.TransformStamped()
+        static_transformStamped.header.stamp = rospy.Time.now()
+        static_transformStamped.header.frame_id = "world"
+        static_transformStamped.child_frame_id = "odom"
+
+        static_transformStamped.transform.translation.x = 0
+        static_transformStamped.transform.translation.y = 0
+        static_transformStamped.transform.translation.z = 0
+        quat = tf.transformations.quaternion_from_euler(0, 0, sympy.pi/2)
+        static_transformStamped.transform.rotation.x = quat[0]
+        static_transformStamped.transform.rotation.y = quat[1]
+        static_transformStamped.transform.rotation.z = quat[2]
+        static_transformStamped.transform.rotation.w = quat[3]
+        # quat = tf.transformations.quaternion_about_axis(-1.10714, [0,0,1])
+        # static_transformStamped.transform.rotation = geometry_msgs.msg.Quaternion(*quat)
+        self.br.sendTransform(static_transformStamped)
 
     def pause_turtle_callback(self, message):
         """ Callback function for pause service (type - Empty).
@@ -91,14 +110,14 @@ class Trajectory():
         return EmptyResponse()
 
 
-    def transform_broadcast(self):
-        """ Transform from world frame (0, 0, 0) to odom frame (0, 0, theta0),
-        where theta0 is the initial angle of the robot on its figure-eight
-        trajectory
-        """
-        pos = (0, 0, 0)
-        rot = tf.transformations.quaternion_from_euler(0, 0, sympy.pi/2) 
-        self.br.sendTransform(pos, rot, rospy.Time.now(), "odom", "world") 
+    # def transform_broadcast(self):
+    #     """ Transform from world frame (0, 0, 0) to odom frame (0, 0, theta0),
+    #     where theta0 is the initial angle of the robot on its figure-eight
+    #     trajectory
+    #     """
+    #     pos = (0, 0, 0)
+    #     rot = tf2_ros.transformations.quaternion_from_euler(0, 0, sympy.pi/2)
+    #     self.br.sendTransform(pos, rot, rospy.Time.now(), "odom", "world") 
 
 
     def turtlebot_twist(self):
@@ -113,9 +132,7 @@ class Trajectory():
 
 
     def move(self):
-        rospy.logdebug(f"Posting: {self._t, self.figure_eight.get_velocity(self._t)}")
-        twist = self.turtlebot_twist()
-        self.transform_broadcast()
+        # self.transform_broadcast()
         self.path.header.stamp = rospy.Time.now()
         self.path.header.frame_id = "odom"
         self.path.poses.append(PoseStamped(header = self.path.header, 
@@ -123,8 +140,10 @@ class Trajectory():
                                             position = Point(self.x, self.y, 0), 
                                             orientation = Quaternion(0, 0, 0, 1))))
         self.path_pub.publish(self.path)
+        rospy.logdebug(f"Posting: {self._t, self.figure_eight.get_velocity(self._t)}")
         # self._t += 1/self.R
         self._t = rospy.get_time() - self.init_t - self.delta_t_paused
+        twist = self.turtlebot_twist()
         self.pub_turtle1_vel.publish(twist)
         self.pub_vel.publish(twist)
         rospy.logdebug(f"t = {self._t}")

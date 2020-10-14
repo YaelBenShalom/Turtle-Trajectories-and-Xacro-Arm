@@ -1,8 +1,0 @@
-prefix=/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/install
-
-Name: turtlebot3_slam
-Description: Description of turtlebot3_slam
-Version: 1.2.3
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: roscpp sensor_msgs

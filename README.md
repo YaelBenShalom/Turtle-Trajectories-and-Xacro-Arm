@@ -20,4 +20,6 @@ This package contains files that control the turtlebot's speed and direction, an
 7. To see the transformation between the `world` frame and the `odom` frame, run `rosrun tf tf_echo /world /odom`
 
 
-LLLLLLLLLLLL
+
+8. rosrun rqt_tf_tree rqt_tf_tree
+

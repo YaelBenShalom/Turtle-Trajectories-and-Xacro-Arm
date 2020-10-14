@@ -1,8 +1,0 @@
-prefix=/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/devel
-
-Name: interbotix_moveit
-Description: Description of interbotix_moveit
-Version: 0.3.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

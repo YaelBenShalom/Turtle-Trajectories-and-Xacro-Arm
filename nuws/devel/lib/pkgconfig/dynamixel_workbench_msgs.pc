@@ -1,8 +1,0 @@
-prefix=/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/devel
-
-Name: dynamixel_workbench_msgs
-Description: Description of dynamixel_workbench_msgs
-Version: 2.0.1
-Cflags: -I/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/devel/include
-Libs: -L${prefix}/lib 
-Requires: std_msgs message_runtime
