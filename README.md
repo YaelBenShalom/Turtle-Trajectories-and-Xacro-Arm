@@ -18,3 +18,6 @@ This package contains files that control the turtlebot's speed and direction, an
 5. To change the parameter `pub_freq` (R - the frequency at which we publish the cmd_vel messages) edit the file `launch/figure_eight.launch`.
 6. To test the calculated values at *t=0* and at *t=T/2* (half a cycle), run `catkin_make run_tests` from the root of workspace.
 7. To see the transformation between the `world` frame and the `odom` frame, run `rosrun tf tf_echo /world /odom`
+
+
+LLLLLLLLLLLL
