@@ -1,6 +1,8 @@
 # homework02-YaelBenShalom
 GitHub repository - https://github.com/ME495-EmbeddedSystems/homework02-YaelBenShalom
 
+All the videos from the assignment can be found in the google drive file - https://drive.google.com/drive/folders/1e13FX7wEGKIPLZqIQpsLMQt4UrCeGdb-?usp=sharing
+
 ## Overview
 This package contains files that control the turtlebot's speed and direction, and make it move in an eight-shape trajectory.
 1. The turtlebot begins in a `paused` state and believe that that configuration is *(x, y, z)* = *(0, 0, 0)*, relative to it's odometry frame.
