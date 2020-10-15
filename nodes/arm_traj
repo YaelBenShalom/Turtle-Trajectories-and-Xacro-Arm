@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
 """
- The arm_traj node ... 
+ The arm_traj node causes the end-effector to track a given trajectory
 
 PUBLISHERS:
+  joint_states (sensor_msgs/JointState) - the arm's joint state
 
-SERVICES:   
-  
 PARAMETERS:
-
+  L1 - The length of the first link
+  L2 - The length of the second link
+  period - The amount of time it takes the arm to complete one round
 """
 
 import rospy
@@ -22,8 +23,8 @@ from sympy import symbols, Eq, Function, cos, sin, acos, atan2, solve, sqrt
 from math import pi
 
 class ArmTrajectory():
-    """ Publish a geometry_msgs/Twist of the calculated linear and angular
-    velocity to the tertlebot's cmd_vel at a fixed rate 
+    """ Publish a sensor_msgs/JointState of the calculated joint state at a
+    fixed rate 
     """
     def __init__(self):
         self.L1 = rospy.get_param("L1")    # initializing the parameter L1
@@ -39,6 +40,8 @@ class ArmTrajectory():
 
 
     def calculate_trajectory(self, t):
+        """ Calculate the end-effector's location (x, y) as a function of t
+        """
         h = 2*(self.L1 + self.L2)/3
         self.x = (0.9*cos(2*pi*self.t/self.T)*sqrt((self.L1 + self.L2)**2 - h**2)) # a function for the component x(t) of the trajectory
         self.y = (2*(self.L1 + self.L2)/3) # a function for the component y(t) of the trajectory
@@ -46,9 +49,12 @@ class ArmTrajectory():
 
 
     def inverse_kinematics(self):
-        '''
+        """ inverse kinematics function that gets the end-effector position (x,y)
+        and returns the joint state (theta1, theta2).
         Eqations from Lynch, Park, Modern Robotics Chapter 6.
-        '''
+
+        returns - the joint state (theta1, theta2)
+        """
         beta = acos((self.L1**2 + self.L2**2 - self.x**2 - self.y**2)/(2*self.L1*self.L2))
         alpha = acos((self.x**2 + self.y**2 + self.L1**2 - self.L2**2)/(2*self.L1*sqrt(self.x**2 + self.y**2)))
         gamma = atan2(self.y, self.x)
@@ -59,6 +65,11 @@ class ArmTrajectory():
 
 
     def arm_msg(self):
+        """ calculating the joint state using the end-effector location
+        calculation function and the inverse kinematics function.
+
+        Returns - the joints state
+        """
         self.t = rospy.get_time()
         self.calculate_trajectory(self.t)
         self.inverse_kinematics()

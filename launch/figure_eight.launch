@@ -8,8 +8,6 @@
    <node name="trajectory" pkg="homework2" type="trajectory" >
            <param name="pub_freq" value="60" />
    </node>
-   <!-- <param name="my_robot_description" textfile="$(find homework2)/urdf/robotmodel.xml"/> -->
-   <!-- <arg name="model" default="$(env TURTLEBOT_MODEL)" doc="model type [burger, waffle, waffle_pi]"/> -->
    <group if="$(arg rqt_plot)">
         <node name="roaming_turtle" pkg="turtlesim" type="turtlesim_node" />
         <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot" args="/point/Point/x_d:y_d" />

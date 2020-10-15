@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
 """
- The arm_mark node ... 
+ The arm_mark node draws an end-effector using rviz markers.
 
 PUBLISHERS:
-
-SERVICES:   
+  visualization_marker (visualization_messages/Marker) - The markers we are drawing
   
 PARAMETERS:
-
+  period - The amount of time it takes the arm to complete one round
 """
 
 import rospy
@@ -21,8 +20,7 @@ import tf2_ros
 from visualization_msgs.msg import Marker, InteractiveMarkerControl, MarkerArray
 
 class ArmMark():
-    """ Publish a geometry_msgs/Twist of the calculated linear and angular
-    velocity to the tertlebot's cmd_vel at a fixed rate 
+    """ Publish visualization_messages/Marker of the arm end-effector
     """
     def __init__(self):
         self.T = rospy.get_param("T")      # initializing the parameter T
@@ -33,6 +31,8 @@ class ArmMark():
         self.counter = 0
 
     def draw_marker(self):
+        """ draw_marker fanction founds the end-effector position and publish it
+        """
         self.marker = Marker()
         self.marker.lifetime = rospy.Duration(self.T/5)
         self.marker.header.frame_id = "link3"
@@ -61,19 +61,8 @@ class ArmMark():
 
     def run(self):
         while not rospy.is_shutdown():
-            # we listen in a try block.  If a frame has not bene published
-            # recently enough, then there will be an error and we continue
-            # for demonstration purposes we catch each exception individually
-            # print(buffer.all_frames_as_string())
-            
-            # buffer = tf2_ros.Buffer()
-            # buffer.all_frames_as_string()
-            # print(buffer.all_frames_as_string())
-            # rospy.loginfo("buffer is: "  + str(buffer))
-            # get the latest transform between left and right
-          
             try:
-               # get the latest transform between left and right
+               # get the latest transform between base_link and link3
                self.trans = self.buffer.lookup_transform("base_link", "link3", rospy.Time())
                self.x = self.trans.transform.translation.x
                rospy.loginfo("Transform is: " + str(self.trans))

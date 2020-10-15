@@ -32,7 +32,6 @@ def calculate_velocity(T_val, H_val, W_val):
     thetadot = theta.diff(t)        # derivative d/dt of theta(t) 
     omega = thetadot                # defining omega
     
-    # theta = sympy.simplify(theta.subs([(W, W_val), (H, H_val), (T, T_val)]))
     v = sympy.simplify(v.subs([(W, W_val), (H, H_val), (T, T_val)]))
     omega = sympy.simplify(omega.subs([(W, W_val), (H, H_val), (T, T_val)]))
     x = sympy.simplify(x.subs([(W, W_val), (H, H_val), (T, T_val)]))
@@ -51,6 +50,9 @@ class FigureEight():
         self._t = symbols(r't')
 
     def get_velocity(self, time_step):
+        """ this function takes the calculation solution and returns the position
+        (x, y) and the linear\angular velocity (v, w)
+        """
         x = self._x.subs(self._t, time_step)
         y = self._y.subs(self._t, time_step)
         v = self._v.subs(self._t, time_step)
@@ -58,6 +60,8 @@ class FigureEight():
         return x, y, v, omega
 
     def test_output(self, time_step):
+        """ A function for testing the calculation 
+        """
         x = self._x.subs(self._t, time_step)
         y = self._y.subs(self._t, time_step)
         xdot = self._xdot.subs(self._t, time_step)
@@ -67,27 +71,3 @@ class FigureEight():
         v = self._v.subs(self._t, time_step)
         omega = self._omega.subs(self._t, time_step)
         return x, y, xdot, ydot, xddot, yddot, v, omega
-
-
-# fe = FigureEight(60, 5, 8)
-# print(fe)
-# x, y, xdot, ydot, xddot, yddot, v, omega = fe.test_output(0)
-# print(x, y, xdot, ydot, xddot, yddot, v, omega)
-
-# t = symbols(r't')
-# t_values = np.arange(0.0, 100.0, 1)
-# x_values = []
-# y_values = []
-# for i in t_values:
-#     x, y, v, omega = fe.get_velocity(i)
-#     x_values.append(x)
-#     y_values.append(y)
-
-
-# plt.subplot(211)
-# plt.plot(t_values, x_values, 'r--')
-# plt.subplot(212)
-# plt.plot(t_values, y_values, 'b--')
-# plt.subplot(221)
-# plt.plot(x_values, y_values, 'g--')
-# plt.show()

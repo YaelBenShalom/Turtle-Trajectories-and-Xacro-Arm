@@ -26,4 +26,6 @@ This package contains files that control the turtlebot's speed and direction, an
 
 ### Part 2:
 
-1. To start running the arm, run `rroslaunch homework2 xacro_arm.launch`.
+1. To run the arm launchfile on rviz, run `roslaunch homework2 xacro_arm.launch`.
+    1. to run the launchfile on rviz with gui, run `roslaunch homework2 xacro_arm.launch gui:=True`
+2. To run the arm launchfile on rviz with the marker, run `roslaunch homework2 mark_arm.launch`.

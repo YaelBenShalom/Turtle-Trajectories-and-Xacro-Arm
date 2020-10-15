@@ -161,6 +161,8 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
   nodes/trajectory
+  nodes/arm_traj
+  nodes/arm_mark
 #  nodes/calculations1.py
   src/${PROJECT_NAME}/calculations.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

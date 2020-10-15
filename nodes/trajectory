@@ -60,9 +60,7 @@ class Trajectory():
         self.x = None
         self.y = None
 
-        # Transform from world frame (0, 0, 0) to odom frame (0, 0, theta0)
-        # self.br = tf.TransformBroadcaster()
-        self.br = tf2_ros.StaticTransformBroadcaster() # TODO
+        self.br = tf2_ros.StaticTransformBroadcaster() # static transform between world to odom frame
 
         static_transformStamped = geometry_msgs.msg.TransformStamped()
         static_transformStamped.header.stamp = rospy.Time.now()
@@ -72,7 +70,7 @@ class Trajectory():
         static_transformStamped.transform.translation.x = 0
         static_transformStamped.transform.translation.y = 0
         static_transformStamped.transform.translation.z = 0
-        quat = tf.transformations.quaternion_from_euler(0, 0, 1.08) # 0.896055384571344 - the angle of the turtle at (0,0,0) - from calculation
+        quat = tf.transformations.quaternion_from_euler(0, 0, 1.08) # the angle of the turtle at (0,0,0) - from calculation
         static_transformStamped.transform.rotation.x = quat[0]
         static_transformStamped.transform.rotation.y = quat[1]
         static_transformStamped.transform.rotation.z = quat[2]
@@ -120,7 +118,8 @@ class Trajectory():
 
 
     def move(self):
-        # self.transform_broadcast()
+        """ Move the turtle by publish a twist messages to the cmd_vel
+        """
         self.path.header.stamp = rospy.Time.now()
         self.path.header.frame_id = "world"
         self.path.poses.append(PoseStamped(header = self.path.header, 
@@ -129,16 +128,13 @@ class Trajectory():
                                             orientation = Quaternion(0, 0, 0, 1))))
         self.path_pub.publish(self.path)
         rospy.logdebug(f"Posting: {self._t, self.figure_eight.get_velocity(self._t)}")
-        # self._t += 1/self.R
         self._t = rospy.get_time() - self.init_t - self.delta_t_paused
         twist = self.turtlebot_twist()
         self.pub_turtle1_vel.publish(twist)
         self.pub_vel.publish(twist)
         rospy.logdebug(f"t = {self._t}")
-        # if int(self._t) == self.T:       
         if int(self._t/self.round) == self.T:
             self.path.poses = []
-            # self._t = 0
             self.round += 1
 
 
@@ -155,9 +151,7 @@ class Trajectory():
 def main():
     """ The main() function. """
     rospy.init_node('trajectory', log_level = rospy.DEBUG)
-    # rospy.logdebug(f"Running 1") #TODO 
     traj = Trajectory()
-    # rospy.logdebug(f"Running 2") #TODO 
     traj.run()
     rospy.spin()
 
