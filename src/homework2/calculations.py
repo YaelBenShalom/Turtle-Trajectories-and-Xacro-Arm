@@ -69,7 +69,7 @@ class FigureEight():
         return x, y, xdot, ydot, xddot, yddot, v, omega
 
 
-# fe = FigureEight(18, 5, 9)
+# fe = FigureEight(60, 5, 8)
 # print(fe)
 # x, y, xdot, ydot, xddot, yddot, v, omega = fe.test_output(0)
 # print(x, y, xdot, ydot, xddot, yddot, v, omega)

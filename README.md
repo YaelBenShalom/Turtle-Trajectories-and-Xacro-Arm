@@ -8,6 +8,9 @@ This package contains files that control the turtlebot's speed and direction, an
 3. Upon calling the `pause` service, the turtlebot will pause its motion, without resetting its position.
 
 ## Usage instructions
+
+### Part 1:
+
 1. To start running the turtlebot in figure-eight trajectory, run `roslaunch homework2 figure_eight.launch`. The turtle begins in a `paused` state.
     1. To launch the rqt_plot and show the turtlebot's x and y position (from odometry) vs time, add `rqt_plot:=True` to the roslaunch command.
     2. To launch the turtlebot Gazebo simulation, add `Gazebo:=True` to the roslaunch command.
@@ -19,7 +22,8 @@ This package contains files that control the turtlebot's speed and direction, an
 6. To test the calculated values at *t=0* and at *t=T/2* (half a cycle), run `catkin_make run_tests` from the root of workspace.
 7. To see the transformation between the `world` frame and the `odom` frame, run `rosrun tf tf_echo /world /odom`
 
-
-
 8. rosrun rqt_tf_tree rqt_tf_tree
 
+### Part 2:
+
+1. To start running the arm, run `rroslaunch homework2 xacro_arm.launch`.

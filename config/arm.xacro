@@ -59,7 +59,7 @@
       </visual>
 </link>
 
-<joint name="joint3" type="continuous">
+<joint name="joint3" type="fixed">
     <axis xyz="0 0 1" />
     <limit effort="1000.0"  velocity="0.5" />
     <origin rpy="0 0 0" xyz="${L2} 0 0" />

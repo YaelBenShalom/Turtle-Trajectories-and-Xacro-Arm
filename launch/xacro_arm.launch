@@ -3,6 +3,8 @@
    <arg name="gui" default="True" />
    <arg name="rviz" default="True" />
    
+   <rosparam command="load" file="$(find homework2)/config/arm.yaml" />
+
 
    <!-- <rosparam name="load" file="$(find homework2)/config/arm.yaml" /> -->
 
@@ -16,15 +18,15 @@
         <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
    </group> -->
 
-   <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" /> -->
+   <node name="arm_traj" pkg="homework2" type="arm_traj" />
 
    <group if="$(arg rviz)">
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(find homework2)/config/arm.rviz" />
         <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" >
         </node>
    </group>
-   <group if="$(arg gui)">
+   <!-- <group if="$(arg gui)">
         <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
-   </group>
+   </group> -->
    
 </launch>

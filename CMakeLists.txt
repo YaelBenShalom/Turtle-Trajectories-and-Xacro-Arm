@@ -9,11 +9,7 @@ project(homework2)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
 geometry_msgs
-turtlesim
-tf
-tf2
-tf2_ros
-std_msgs)
+turtlesim)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 

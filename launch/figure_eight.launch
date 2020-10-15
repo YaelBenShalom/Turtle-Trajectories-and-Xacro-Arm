@@ -12,7 +12,6 @@
    <!-- <arg name="model" default="$(env TURTLEBOT_MODEL)" doc="model type [burger, waffle, waffle_pi]"/> -->
    <group if="$(arg rqt_plot)">
         <node name="roaming_turtle" pkg="turtlesim" type="turtlesim_node" />
-        <!-- <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot" args="/joint_states/position[0] /joint_states/position[1]" /> -->
         <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot" args="/point/Point/x_d:y_d" />
    </group>
    <group if="$(arg Gazebo)">

@@ -108,16 +108,6 @@ class Trajectory():
         return EmptyResponse()
 
 
-    # def transform_broadcast(self):
-    #     """ Transform from world frame (0, 0, 0) to odom frame (0, 0, theta0),
-    #     where theta0 is the initial angle of the robot on its figure-eight
-    #     trajectory
-    #     """
-    #     pos = (0, 0, 0)
-    #     rot = tf2_ros.transformations.quaternion_from_euler(0, 0, sympy.pi/2)
-    #     self.br.sendTransform(pos, rot, rospy.Time.now(), "odom", "world") 
-
-
     def turtlebot_twist(self):
         """ Create a twist suitable for the turtlebot's cmd_vel
         Args: None
