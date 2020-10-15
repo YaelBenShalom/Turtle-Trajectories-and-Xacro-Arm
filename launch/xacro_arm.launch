@@ -1,32 +1,17 @@
 <launch>
-   <!-- <arg name="arm" default="$(find homework2)/confid/arm.xacro"/> -->
-   <arg name="gui" default="True" />
+   <arg name="gui" default="False" />
    <arg name="rviz" default="True" />
    
    <rosparam command="load" file="$(find homework2)/config/arm.yaml" />
-
-
-   <!-- <rosparam name="load" file="$(find homework2)/config/arm.yaml" /> -->
-
-   <!-- <node name="arm_traj" pkg="homework2" type="arm_traj" />
-   <node name="arm_marker" pkg="homework2" type="arm_marker" /> -->
-
-   <!-- <param name="arm" command="$(find xacro)/xacro $(arg arm)" /> -->
    <param name="robot_description" command="$(find xacro)/xacro $(find homework2)/config/arm.xacro" />
-  
-   <!-- <group unless="$(arg gui)">
-        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
-   </group> -->
 
    <node name="arm_traj" pkg="homework2" type="arm_traj" />
 
    <group if="$(arg rviz)">
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(find homework2)/config/arm.rviz" />
-        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" >
-        </node>
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />
    </group>
-   <!-- <group if="$(arg gui)">
+   <group if="$(arg gui)">
         <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
-   </group> -->
-   
+   </group>
 </launch>
