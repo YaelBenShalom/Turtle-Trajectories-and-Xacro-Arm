@@ -1,4 +1,4 @@
-
+## usefull commands:
 
 # After turning the turtlebot on
 arp -na | grep -i "b8:27:eb"  # looks for the mac address of the raspberry pi
@@ -28,6 +28,36 @@ angular:
   z: 1.0" 
 
 
+env | grep -i ros (host):
+ROS_VERSION=1
+PKG_CONFIG_PATH=/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/devel/lib/pkgconfig:/home/yael/nuws/devel/lib/pkgconfig:/opt/ros/noetic/lib/pkgconfig:/opt/ros/noetic/lib/x86_64-linux-gnu/pkgconfig
+ROS_PYTHON_VERSION=3
+ROS_PACKAGE_PATH=/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/src:/home/yael/nuws/src:/opt/ros/noetic/share
+ROSLISP_PACKAGE_DIRECTORIES=/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/devel/share/common-lisp:/home/yael/nuws/devel/share/common-lisp
+ROS_ETC_DIR=/opt/ros/noetic/etc/ros
+CMAKE_PREFIX_PATH=/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/devel:/home/yael/nuws/devel:/opt/ros/noetic
+PYTHONPATH=/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/devel/lib/python3/dist-packages:/home/yael/nuws/devel/lib/python3/dist-packages:/opt/ros/noetic/lib/python3/dist-packages
+ROS_MASTER_URI=http://yael-ubuntu.local:11311
+ROS_HOSTNAME=yael-ubuntu.local
+LD_LIBRARY_PATH=/home/yael/Documents/MSR_Courses/MECH_ENG_495/HW/HW2/nuws/devel/lib:/home/yael/nuws/devel/lib:/opt/ros/noetic/lib:/opt/ros/noetic/lib/x86_64-linux-gnu
+PATH=/opt/ros/noetic/bin:/home/yael/.local/bin:/home/yael/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+ROS_ROOT=/opt/ros/noetic/share/ros
+ROS_DISTRO=noetic
 
+env | grep -i ros (turtle):
+ROS_VERSION=1
+PKG_CONFIG_PATH=/home/ubuntu/ws/devel/lib/pkgconfig:/opt/ros/noetic/lib/pkgconfig
+ROS_PYTHON_VERSION=3
+ROS_PACKAGE_PATH=/home/ubuntu/ws/src:/opt/ros/noetic/share
+ROSLISP_PACKAGE_DIRECTORIES=/home/ubuntu/ws/devel/share/common-lisp
+ROS_ETC_DIR=/opt/ros/noetic/etc/ros
+CMAKE_PREFIX_PATH=/home/ubuntu/ws/devel:/opt/ros/noetic
+PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages
+ROS_MASTER_URI=http://10.0.0.185:11311
+ROS_HOSTNAME=turtlebot.local
+LD_LIBRARY_PATH=/home/ubuntu/ws/devel/lib:/opt/ros/noetic/lib
+PATH=/opt/ros/noetic/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+ROS_ROOT=/opt/ros/noetic/share/ros
+ROS_DISTRO=noetic
 
 
