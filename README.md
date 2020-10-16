@@ -14,7 +14,7 @@ This package contains files that control the turtlebot's speed and direction, an
 
 ### Part 2:
 1. In this part I created a Xacro URDF for the robot arm shown below, visualized it in rviz, and made it's end-effector follow a trajectory.
-![A two link robot arm](https://github.com/ME495-EmbeddedSystems/homework02-YaelBenShalom/images/twolink.png)
+![A two link robot arm](https://github.com/ME495-EmbeddedSystems/homework02-YaelBenShalom/blob/master/images/twolink.png)
 
 
 ## Usage and Configuration Instructions
