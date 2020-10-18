@@ -22,7 +22,7 @@ This package contains files that control the turtlebot's speed and direction, an
 ### Part 1:
 
 1. To activate the turtle, SSH into the turtlebot (`ssh ubuntu@turtlebot.local`) and run `roslaunch turtlebot3_bringup turtlebot3_robot.launch`.
-2. To start running the turtlebot in figure-eight trajectory, run `roslaunch homework2 figure_eight.launch`. The turtle begins in a `paused` state. <br\> ![turtlebot3](https://github.com/ME495-EmbeddedSystems/homework02-YaelBenShalom/blob/master/GIFs/turtlebot3.gif)
+2. To start running the turtlebot in figure-eight trajectory, run `roslaunch homework2 figure_eight.launch`. The turtle begins in a `paused` state. <br/> ![turtlebot3](https://github.com/ME495-EmbeddedSystems/homework02-YaelBenShalom/blob/master/GIFs/turtlebot3.gif)
 
     1. To launch the rqt_plot and show the turtlebot's x and y position (from odometry) vs time, add `rqt_plot:=True` to the roslaunch command.
 
