@@ -2,3 +2,8 @@ parameters:
   width: 8
   height: 5
   period: 60
+
+  # For turtlebot2:
+  # width: 2
+  # height: 1.25
+  # period: 40
