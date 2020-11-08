@@ -1,9 +1,6 @@
 # MECH_ENG_495 - Homework 2
 GitHub repository - https://github.com/ME495-EmbeddedSystems/homework02-YaelBenShalom
 
-All the videos from the assignment can be found in the google drive file - https://drive.google.com/drive/folders/1e13FX7wEGKIPLZqIQpsLMQt4UrCeGdb-?usp=sharing
-
-
 ## Overview
 
 ### Part 1:
