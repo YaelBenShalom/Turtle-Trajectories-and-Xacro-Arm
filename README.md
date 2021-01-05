@@ -1,5 +1,5 @@
 # MECH_ENG_495 - Homework 2
-GitHub repository - https://github.com/ME495-EmbeddedSystems/homework02-YaelBenShalom
+GitHub repository - https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM
 
 ## Overview
 
