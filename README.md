@@ -1,7 +1,14 @@
-# MECH_ENG_495 - Homework 2
+# Turtle Trajectories and Xacro ARM
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+- [Usage and Configuration Instructions](#usage-and-configuration-instructions)
 
 
 ## Overview
+This repo contains 2 independent projects:
 
 ### Part 1:
 This package contains files that control the turtlebot's speed and direction, and make it move in an eight-shape trajectory.
@@ -10,8 +17,22 @@ This package contains files that control the turtlebot's speed and direction, an
 3. Upon calling the `pause` service, the turtlebot will pause its motion, without resetting its position.
 
 ### Part 2:
-1. In this part I created a Xacro URDF for the robot arm shown below, visualized it in rviz, and made it's end-effector follow a trajectory.
-![A two link robot arm](https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM/blob/master/images/twolink.png)
+In this part I created a Xacro URDF for the robot arm shown below, visualized it in rviz, and made it's end-effector follow a trajectory.
+<p align="center">
+  <img align="center" src="https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM/blob/master/images/twolink.png">
+</p>
+
+
+# Getting Started
+
+Create a workspace, clone the repo, and build the workspace:
+```
+mkdir -p ws/src && cd ws/src
+git clone https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM.git
+cd ../..
+catkin_make
+source devel/setup.bash 
+```
 
 
 ## Usage and Configuration Instructions
@@ -19,19 +40,28 @@ This package contains files that control the turtlebot's speed and direction, an
 ### Part 1:
 
 1. To activate the turtle, SSH into the turtlebot (`ssh ubuntu@turtlebot.local`) and run `roslaunch turtlebot3_bringup turtlebot3_robot.launch`.
-2. To start running the turtlebot in figure-eight trajectory, run `roslaunch homework2 figure_eight.launch`. The turtle begins in a `paused` state. <br/> ![turtlebot3](https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM/blob/master/GIFs/turtlebot3.gif)
+2. To start running the turtlebot in figure-eight trajectory, run `roslaunch Turtle-Trajectories-and-Xacro-ARM figure_eight.launch`. The turtle begins in a `paused` state. <br/>
+    <p align="center">
+      <img align="center" src="https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM/blob/master/GIFs/turtlebot3.gif">
+    </p>
 
-    1. To launch the rqt_plot and show the turtlebot's x and y position (from odometry) vs time, add `rqt_plot:=True` to the roslaunch command.
+    1. To launch the rqt_plot and show the turtlebot's x and y position (from odometry) vs. time, add `rqt_plot:=True` to the roslaunch command.
 
-    ![rqt_plot & turtlesim simulation](https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM/blob/master/GIFs/robot_turtlesim.gif)
+    <p align="center">
+        <img align="center" src="https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM/blob/master/GIFs/robot_turtlesim.gif">
+    </p>
 
     2. To launch the turtlebot Gazebo simulation, add `Gazebo:=True` to the roslaunch command.
 
-    ![gazebo simulation](https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM/blob/master/GIFs/robot_gazebo.gif)
+    <p align="center">
+        <img align="center" src="https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM/blob/master/GIFs/robot_gazebo.gif">
+    </p>
 
     3. To launch the turtlebot Gazebo simulation, add `rviz:=True` to the roslaunch command.
 
-    ![rviz simulation](https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM/blob/master/GIFs/robot_rviz.gif)
+    <p align="center">
+        <img align="center" src="https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM/blob/master/GIFs/robot_rviz.gif">
+    </p>
 
 3. To move the turtle, call the service `resume` (`rosservice call /resume`).
 4. To pause the turtle movement, call the service `pause` (`rosservice call /pause`).
@@ -41,10 +71,13 @@ This package contains files that control the turtlebot's speed and direction, an
 8. To see the transformation between the `world` frame and the `odom` frame, run `rosrun tf tf_echo /world /odom`
 9. To watch the rqt tree, run `rosrun rqt_tf_tree rqt_tf_tree`
 
+
 ### Part 2:
 
-1. To run the arm launchfile on rviz, run `roslaunch homework2 xacro_arm.launch`.
-    1. to run the launchfile on rviz with gui, run `roslaunch homework2 xacro_arm.launch gui:=True`
-2. To run the arm launchfile on rviz with the marker, run `roslaunch homework2 mark_arm.launch`
+1. To run the arm launchfile on rviz, run `roslaunch Turtle-Trajectories-and-Xacro-ARM xacro_arm.launch`.
+2. To run the launchfile on rviz with gui, run `roslaunch Turtle-Trajectories-and-Xacro-ARM xacro_arm.launch gui:=True`
+3. To run the arm launchfile on rviz with the marker, run `roslaunch Turtle-Trajectories-and-Xacro-ARM mark_arm.launch`
 
-![arm rviz simulation](https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM/blob/master/GIFs/arm_rviz.gif)
+<p align="center">
+    <img align="center" src="https://github.com/YaelBenShalom/Turtle-Trajectories-and-Xacro-ARM/blob/master/GIFs/arm_rviz.gif">
+</p>
